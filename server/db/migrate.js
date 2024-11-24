@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';  // Changed this line
 import { db } from './index.js';
 import { logger } from '../utils/logger.js';
 import 'dotenv/config';
@@ -78,3 +78,5 @@ async function migrate() {
     process.exit(1);
   }
 }
+
+migrate();
