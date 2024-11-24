@@ -2,7 +2,7 @@
   "name": "voting-dashboard",
   "private": true,
   "version": "1.0.0",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "concurrently \"vite\" \"node server/index.js\"",
     "build": "tsc && vite build",

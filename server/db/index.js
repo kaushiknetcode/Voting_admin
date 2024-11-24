@@ -1,5 +1,5 @@
-import pg from 'pg';
-import { logger } from '../utils/logger.js';
+const pg = require('pg');
+const { logger } = require('../utils/logger.js');
 
 const { Pool } = pg;
 
@@ -28,7 +28,7 @@ pool.on('connect', () => {
   logger.debug('New client connected to the pool');
 });
 
-export const db = {
+const db = {
   query: async (text, params) => {
     const client = await pool.connect();
     try {
@@ -68,3 +68,5 @@ export const db = {
     }
   }
 };
+
+module.exports = { db };

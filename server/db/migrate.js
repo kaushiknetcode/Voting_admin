@@ -1,12 +1,11 @@
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import * as bcrypt from 'bcryptjs';  // Changed this line
-import { db } from './index.js';
-import { logger } from '../utils/logger.js';
-import 'dotenv/config';
+const fs = require('fs').promises;
+const path = require('path');
+const bcrypt = require('bcryptjs');
+const { db } = require('./index.js');
+const { logger } = require('../utils/logger.js');
+require('dotenv').config();
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = path.resolve();
 
 async function hashPassword(password) {
   const salt = await bcrypt.genSalt(10);
@@ -19,17 +18,15 @@ async function migrate() {
 
     // Read and execute schema.sql
     const schema = await fs.readFile(
-      path.join(__dirname, 'schema.sql'),
+      path.join(__dirname, 'server', 'db', 'schema.sql'),
       'utf-8'
     );
     await db.query(schema);
     logger.info('Schema created successfully');
 
-    // Insert initial data
+    // Insert initial admin users
     const users = [
-      // Super Admin
       ['super_admin', await hashPassword('admin2024'), 'SUPER_ADMIN', 0],
-      // APOs
       ['hq_apo', await hashPassword('hq2024'), 'APO', 1],
       ['malda_apo', await hashPassword('malda2024'), 'APO', 2],
       ['hwh_apo', await hashPassword('hwh2024'), 'APO', 3],
@@ -38,7 +35,6 @@ async function migrate() {
       ['kpa_apo', await hashPassword('kpa2024'), 'APO', 6],
       ['jmp_apo', await hashPassword('jmp2024'), 'APO', 7],
       ['asl_apo', await hashPassword('asl2024'), 'APO', 8],
-      // POs
       ['hq_po', await hashPassword('hq@2024'), 'PO', 1],
       ['malda_po', await hashPassword('malda@2024'), 'PO', 2],
       ['hwh_po', await hashPassword('hwh@2024'), 'PO', 3],
@@ -46,7 +42,7 @@ async function migrate() {
       ['llh_po', await hashPassword('llh@2024'), 'PO', 5],
       ['kpa_po', await hashPassword('kpa@2024'), 'PO', 6],
       ['jmp_po', await hashPassword('jmp@2024'), 'PO', 7],
-      ['asl_po', await hashPassword('asl@2024'), 'PO', 8],
+      ['asl_po', await hashPassword('asl@2024'), 'PO', 8]
     ];
 
     for (const [username, password, role, placeId] of users) {
@@ -61,7 +57,7 @@ async function migrate() {
       ['2024-12-04', false, false],
       ['2024-12-05', false, false],
       ['2024-12-06', false, false],
-      ['2024-12-10', false, false],
+      ['2024-12-10', false, false]
     ];
 
     for (const [date, isActive, isComplete] of votingDates) {
