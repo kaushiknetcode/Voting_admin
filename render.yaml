@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: voting-dashboard
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5001
+      - key: JWT_SECRET
+        generateValue: true
+      - key: VITE_API_URL
+        value: https://your-render-app.onrender.com
+      - fromDatabase:
+          name: voting-db
+          property: connectionString
+        key: DATABASE_URL
+
+databases:
+  - name: voting-db
+    plan: free
+    ipAllowList: []
